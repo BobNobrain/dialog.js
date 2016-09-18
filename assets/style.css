@@ -1,0 +1,79 @@
+.output {
+	box-sizing: border-box;
+	padding: 5px;
+	border: 1px solid #bbb;
+	background: #222;
+	font-family: monospace;
+	color: #ddd;
+	font-size: 1.3em;
+}
+
+.output .name {
+	color: #7bf;
+	font-weight: bold;
+}
+.output .object > .name::after {
+	content: ': {';
+	color: #bbb;
+	font-weight: normal;
+}
+.output .primitive > .name::after {
+	content: ':';
+	color: #bbb;
+}
+
+.output .prop::after {
+	content: ',';
+	color: #bbb;
+}
+.output .prop.object::after {
+	content: '},';
+}
+.output .prop:last-of-type::after {
+	content: '';
+}
+.output .prop.object:last-of-type::after {
+	content: '}';
+}
+
+.output .name i {
+	color: #999;
+	font-weight: normal;
+}
+
+.output .object > .content {
+	padding: 5px;
+	padding-left: 2em;
+	border-left: 1px dashed #444;
+	margin-left: 5px;
+	margin-bottom: 3px;
+}
+
+.output .object:hover > .content {
+	background: rgba(0,0,0,0.1);
+}
+.output .object:hover > .name {
+	color: #59f;
+}
+
+.output .array .item {
+	position: relative;
+}
+.output .object .item::before {
+	content: attr(data-n);
+	color: #888;
+	position: absolute;
+	right: calc(100% + 5px);
+	top: 0;
+	display: none;
+}
+.output .object .item:hover::before {
+	display: block;
+}
+.output .object .item::after {
+	content: ',';
+	color: #bbb;
+}
+.output .object .item:last-of-type::after {
+	content: '';
+}
