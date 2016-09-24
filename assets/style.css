@@ -1,3 +1,15 @@
+html, body {
+	width: 100%; height: 100%;
+	padding: 0; margin: 0;
+	box-sizing: border-box;
+	background: #333;
+	color: #ddd;
+}
+body { padding: 5px; }
+#reply {
+	width: 400px;
+}
+
 .output {
 	box-sizing: border-box;
 	padding: 5px;
@@ -12,10 +24,18 @@
 	color: #7bf;
 	font-weight: bold;
 }
-.output .object > .name::after {
-	content: ': {';
+.output .compound.array > .content > .prop > .name {
+	color: #f95;
+}
+.output .compound > .name::after {
 	color: #bbb;
 	font-weight: normal;
+}
+.output .compound.object > .name::after {
+	content: ': {';
+}
+.output .compound.array > .name::after {
+	content: ': [';
 }
 .output .primitive > .name::after {
 	content: ':';
@@ -26,14 +46,21 @@
 	content: ',';
 	color: #bbb;
 }
-.output .prop.object::after {
+.output .prop.compound.object::after {
 	content: '},';
 }
-.output .prop:last-of-type::after {
+.output .prop.compound.array::after {
+	content: '],';
+}
+.output .prop:last-of-type::after,
+.output .prop.compound.empty::after {
 	content: '';
 }
-.output .prop.object:last-of-type::after {
+.output .prop.compound.object:last-of-type::after {
 	content: '}';
+}
+.output .prop.compound.array:last-of-type::after {
+	content: ']';
 }
 
 .output .name i {
@@ -41,7 +68,7 @@
 	font-weight: normal;
 }
 
-.output .object > .content {
+.output .compound > .content {
 	padding: 5px;
 	padding-left: 2em;
 	border-left: 1px dashed #444;
@@ -49,31 +76,51 @@
 	margin-bottom: 3px;
 }
 
-.output .object:hover > .content {
-	background: rgba(0,0,0,0.1);
-}
-.output .object:hover > .name {
-	color: #59f;
-}
-
-.output .array .item {
-	position: relative;
-}
-.output .object .item::before {
-	content: attr(data-n);
-	color: #888;
-	position: absolute;
-	right: calc(100% + 5px);
-	top: 0;
+/*
+	colors: #95f #f95 #59f #3d5 #7bf #f54
+*/
+.output .compound > .name { cursor: pointer; }
+.output .compound.collapsed > .content,
+.output .compound.empty > .content {
 	display: none;
 }
-.output .object .item:hover::before {
-	display: block;
+.output .compound.collapsed::after {
+	content: '' !important;
 }
-.output .object .item::after {
-	content: ',';
-	color: #bbb;
+.output .compound.collapsed > .name::after {
+	background: #181818;
 }
-.output .object .item:last-of-type::after {
-	content: '';
+.output .compound.object.collapsed > .name::after {
+	content: ': { ... },';
+}
+.output .compound.array.collapsed > .name::after {
+	content: ': [ ... ],';
+}
+.output .compound.object.collapsed:last-of-type > .name::after {
+	content: ': { ... }';
+}
+.output .compound.array.collapsed:last-of-type > .name::after {
+	content: ': [ ... ]';
+}
+
+.output .compound.object.empty > .name::after {
+	content: ': { },';
+}
+.output .compound.array.empty > .name::after {
+	content: ': [ ],';
+}
+.output .compound.object.empty:last-of-type > .name::after {
+	content: ': { }';
+}
+.output .compound.array.empty:last-of-type > .name::after {
+	content: ': [ ]';
+}
+
+.output .primitive > .content.number { color: #f95; }
+.output .primitive > .content.string { color: #59f; }
+.output .primitive > .content.boolean { color: #3d5; font-weight: bold; }
+
+.output .primitive > .content.string::before,
+.output .primitive > .content.string::after {
+	content: '"';
 }

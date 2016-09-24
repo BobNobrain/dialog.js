@@ -38,12 +38,14 @@ Lexic = (function (){
 
 		toString () { return this.root + '|' + this.suffixes.join(':'); }
 	}
+	Lexic.prototype[Symbol.for('auto-collapse')] = true;
 	lexic.Lexic = Lexic;
 
 	let suffixes = [
 		{ value: 'ed', parts: [ 'verb', 'adjective' ] },
 		{ value: 'ize', parts: [ 'verb' ] },
 		{ value: 'al', parts: [ 'adjective' ] },
+		{ value: 'ish', parts: [ 'adjective' ] },
 		{ value: 'er', parts: [ 'noun' ] },
 		{ value: 'or', parts: [ 'noun' ] },
 		{ value: 'ment', parts: [ 'noun' ] }
