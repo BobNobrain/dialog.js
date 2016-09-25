@@ -15,6 +15,7 @@ Models = (function () {
 			return null; // no match
 		}
 	}
+	models.Model = Model;
 
 	class ModelPart
 	{
@@ -30,6 +31,7 @@ Models = (function () {
 			return false;
 		}
 	}
+	models.ModelPart = ModelPart;
 
 	models.all = [];
 
