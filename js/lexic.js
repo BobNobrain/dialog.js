@@ -157,7 +157,7 @@ Lexic = (function (){
 			done = true;
 			for (let i = 0; i < untriedPrefixes.length; i++)
 			{
-				if (root.startsWith(untriedPrefixes[i].value))
+				if (root.startsWith(untriedPrefixes[i].value) && root.length > untriedPrefixes[i].length)
 				{
 					done = false;
 					root = root.substr(untriedPrefixes[i].value.length, root.length);

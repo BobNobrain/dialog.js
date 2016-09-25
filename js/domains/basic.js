@@ -2,7 +2,7 @@
 (function (domains) {
 	let Basic = [];
 
-	let junkRoots = ['a', 'the', 'also', 'oh', 'wow'];
+	let junkRoots = ['a', 'the', 'also', 'oh', 'wow', 'hello', 'please', 'plz', 'pls', 'sorry'];
 
 	let junkEntry = new domains.Entry('junk',
 		function filterJunk (entity)
@@ -15,7 +15,7 @@
 	let numberEntry = new domains.Entry('number',
 		function filterNumber (entity)
 		{
-			return !isNaN(+entity.root);
+			return !isNaN(+entity.root) && entity.root.length;
 		},
 		function modifyNumber (entity)
 		{
