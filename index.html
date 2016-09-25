@@ -17,7 +17,18 @@
 	<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-	<input type="text" value="Finished #1, #2 was not reproduced." id="reply">
+	<input type="text" value="Finished #1, #2 was not reproduced." id="reply" list="sayings">
+	<datalist id="sayings">
+		<option>Finished #1, #2 was not reproduced.</option>
+		<option>Almost finished my tasks, feeling great!</option>
+		<option>Houston, we have a problem. I broke the thing</option>
+		<option>
+			When we were young, was this the dream we had?
+			We're selebrating nothing, we need to find our way back
+		</option>
+		<option>It's unbelievable, but I've fought the evil man!</option>
+		<option>These two need to be tested, assign somebody please</option>
+	</datalist>
 	<button type="button" onclick="reply();">Say</button>
 	<div class="output" id="output"></div>
 </body>

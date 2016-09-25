@@ -17,6 +17,7 @@ Lexic = (function (){
 		{
 			this.root = word;
 			this.suffixes = [];
+			this.prefixes = [];
 			this.time = lexic.Times.UNKNOWN;
 			this.probableParts = false;
 		}
@@ -34,9 +35,13 @@ Lexic = (function (){
 			{
 				breakWord(this);
 			}
+			assemblyBack(this);
 		}
 
-		toString () { return this.root + '|' + this.suffixes.join(':'); }
+		toString ()
+		{
+			return this.prefixes.join(':') + '|' + this.root + '|' + this.suffixes.reverse().join(':');
+		}
 	}
 	Lexic.prototype[Symbol.for('auto-collapse')] = true;
 	lexic.Lexic = Lexic;
@@ -44,13 +49,32 @@ Lexic = (function (){
 	let suffixes = [
 		{ value: 'ed', parts: [ 'verb', 'adjective' ] },
 		{ value: 'ize', parts: [ 'verb' ] },
+
 		{ value: 'al', parts: [ 'adjective' ] },
 		{ value: 'ish', parts: [ 'adjective' ] },
+		{ value: 'able', parts: [ 'adjective' ] },
+		{ value: 'ible', parts: [ 'adjective' ] },
+		{ value: 'less', parts: [ 'adjective' ], modifiers: [ 'point.negation' ] },
+		{ value: 'ful', parts: [ 'adjective' ], modifiers: [ 'point.enlarge' ] },
+
+		//{ value: 'y', parts: [ 'adverb' ] },
+
+		{ value: 'ing', parts: [ 'noun', 'adjective' ] },
+
 		{ value: 'er', parts: [ 'noun' ] },
 		{ value: 'or', parts: [ 'noun' ] },
+		{ value: 'ness', parts: [ 'noun' ] },
 		{ value: 'ment', parts: [ 'noun' ] }
 	];
 
+	let prefixes = [
+		{ value: 'pre' },
+		{ value: 're' },
+		{ value: 'in', modifiers: [ 'point.negation' ] },
+		{ value: 'im', modifiers: [ 'point.negation' ] },
+		{ value: 'un', modifiers: [ 'point.negation' ] },
+		{ value: 'un', modifiers: [ 'point.negation' ] },
+	];
 
 	let helperVerbs = [
 		{ value: 'is', root: 'be', time: lexic.Times.PRESENT },
@@ -102,6 +126,7 @@ Lexic = (function (){
 		let found = root;
 		let done = false;
 
+		// suffixes
 		while (!done)
 		{
 			done = true;
@@ -112,6 +137,11 @@ Lexic = (function (){
 				{
 					done = false;
 					lex.suffixes.push(suffixes[i].value);
+					if (suffixes[i].modifiers)
+					{
+						if (!lex.modifiers) lex.modifiers = [];
+						lex.modifiers = lex.modifiers.concat(suffixes[i].modifiers);
+					}
 					if (!lex.probableParts) 
 						lex.probableParts = suffixes[i].parts;
 					root = found;
@@ -119,9 +149,42 @@ Lexic = (function (){
 			}
 		}
 
+		// prefixes
+		done = false;
+		let untriedPrefixes = prefixes.slice();
+		while (!done)
+		{
+			done = true;
+			for (let i = 0; i < untriedPrefixes.length; i++)
+			{
+				if (root.startsWith(untriedPrefixes[i].value))
+				{
+					done = false;
+					root = root.substr(untriedPrefixes[i].value.length, root.length);
+					lex.prefixes.push(untriedPrefixes[i].value);
+					if (untriedPrefixes[i].modifiers)
+					{
+						if (!lex.modifiers) lex.modifiers = [];
+						lex.modifiers = lex.modifiers.concat(untriedPrefixes[i].modifiers);
+					}
+
+					untriedPrefixes.splice(i, 1);
+					break;
+				}
+			}
+		}
+
 		lex.root = root;
 
 		return lex;
+	}
+
+	function assemblyBack (lex)
+	{
+		// TODO: obtain a database with existing word roots,
+		// then check the existence of lex.root in it;
+		// if not, try to append some suffixes back and search again
+		// if succedeed, save assemblied root and the rest suffixes/prefixes
 	}
 
 	lexic.processEntity = function (entity)
